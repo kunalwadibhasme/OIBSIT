@@ -1,0 +1,64 @@
+import javax.swing.*;
+import java.awt.event.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+
+public class guessnumber {
+    public static void main(String[] args) {
+        
+        // Creating a new JFrame for the game window
+        JFrame frame = new JFrame("GUESS THE NUMBER");
+        frame.setSize(300, 120);            // Set the size of the JFrame
+        
+        // Create a new JPanel to hold the components
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Use BoxLayout with vertical orientation
+
+        JLabel label = new JLabel("Enter a number between 1 and 100:");
+        JLabel label1 = new JLabel("You have only 5 chance to guess");
+
+        JTextField textField = new JTextField(10);
+        JButton button = new JButton("Guess");
+
+        // Add the label, text field, and button to the panel
+        panel.add(label);
+        panel.add(label1);
+        panel.add(textField);
+        panel.add(button);
+        
+
+        int num = (int) (Math.random() * 100) + 1;
+        final int[] guesses = {0}; // Counter for number of guesses
+         AtomicInteger points = new AtomicInteger(100); // Atomic variable to store points
+
+            button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                guesses[0]++; // Increment the number of guesses
+                int choice = Integer.parseInt(textField.getText());
+                if (choice == num) {
+                    JOptionPane.showMessageDialog(frame, "You have guessed right number");
+                    JOptionPane.showMessageDialog(frame, "Points: " + points);
+
+                    System.exit(0);
+                } else if (choice < num) {
+                    JOptionPane.showMessageDialog(frame, "Enter a bigger number!");
+                    points.addAndGet(-10); // Deduct 10 points for incorrect guess
+
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Enter a smaller number!");
+                    points.addAndGet(-10); // Deduct 10 points for incorrect guess
+
+                }
+
+                if (guesses[0] == 5) {
+                    JOptionPane.showMessageDialog(frame, "You have used all your guesses. The number was " + num);
+                    System.exit(0);
+                }
+            }
+        }
+        );
+        // Add the panel to the frame and make it visible
+        frame.add(panel);
+        frame.setVisible(true);
+    }
+}
